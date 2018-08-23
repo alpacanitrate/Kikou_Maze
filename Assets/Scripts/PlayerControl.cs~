@@ -1,0 +1,248 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerControl : MonoBehaviour {
+	// stats
+	public float HP;
+	public float mind;
+	public float melee;
+	public float ATK;
+	public float armor
+	public float evasion;
+	public float wind;
+	public float forest;
+	public float fire;
+	public float mountain;
+	public float supply;
+	public float movement;
+
+	public float burningResist;
+	public float coldResist;
+	public float corrosionResist;
+	public float infestionResist;
+	public float poisonResist;
+	public float stopResist;
+	public float crippleResist;
+	public float stunResist;
+	public float silenceResist;
+	public float breakResist;
+	public float thornResist;
+	public float blindsightResist;
+	public float rageResist;
+	public float dazzleResist;
+
+	[HideInInspector] public List<float> Resistances;
+
+	[HideInInspector] public enum Status {
+	  idol = 0,
+	  standBy = 1,
+	  move = 2,
+	  attack = 3,
+	}
+	public Vector2 dir;
+	public Tile leading;
+
+
+	public bool selected;
+
+	public enum Alignment {
+	  overJustice = 1,
+	  neutral = 0,
+	  blackForce = 2,
+	}
+	public Alignment align;
+	public int InitQ;
+	public int InitR;
+	public bool alive;
+	[HideInInspector]public GameObject Minu2;
+	[HideInInspector]public GameObject YouDied;
+
+	private Status stts;
+	private int moveMask = 1<<1;
+	private List<Tile> reachable;
+	private List<Tile> past;
+	
+
+	// Use this for initialization
+	void Start () {
+	  Resistances.Add(burningResist);
+	  Resistances.Add(coldResist);
+	  Resistances.Add(corrosionResist);
+	  Resistances.Add(infestionResist);
+	  Resistances.Add(poisonResist);
+	  Resistances.Add(stopResist);
+	  Resistances.Add(crippleResist);
+	  Resistances.Add(stunResist);
+ 	  Resistances.Add(silenceResist);
+	  Resistances.Add(breakResist); 
+ 	  Resistances.Add(thornResist); 
+ 	  Resistances.Add(blindsightResist);
+	  Resistances.Add(rageResist);
+	  Resistances.Add(dazzleResist);
+
+	  stts = Status.idol;
+	  dir = new Vector2(0,0);
+	  reachable = new List<Tile>();
+	  past = new List<Tile>();
+	    Debug.Log(InitQ + " " + InitR);
+	  leading = GameObject.Find("GameManager").GetComponent<GameManager>().OnMap(InitQ, InitR);
+	  GetComponent<Rigidbody2D>().MovePosition( leading.transform.position );
+	  leading.unit = this;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	  if (stts == Status.idol) {
+	    if (selected) {
+	      TranStts(Status.standBy);
+	    }
+	  }
+
+	  if (stts == Status.standBy) { 
+	    if (Input.GetKey("s")) {
+		TranStts(Status.move);
+		PathFind();
+	    }
+
+	    if (Input.GetKey("a")) {
+		TranStts(Status.attack);
+		MeleeFind();
+	    }
+	    
+
+	    if(Input.GetMouseButtonDown(1)) {
+	      if( CastRayToTile(Input.mousePosition) ) {
+	        Tile tile = CastRayToTile(Input.mousePosition);
+		tile.SetColor("brown");
+		tile.SetIdolColor("brown");
+		tile.cost = 2;
+	      }
+	    }
+	  }
+
+	  if (stts == Status.move) { 
+	   if (Input.GetMouseButtonDown(0)) {
+	      if( CastRayToTile(Input.mousePosition) && reachable.Contains(CastRayToTile(Input.mousePosition)) ) {
+		leading.unit = null;
+	        leading = CastRayToTile(Input.mousePosition);
+		leading.unit = this;
+		GetComponent<Rigidbody2D>().MovePosition( leading.transform.position );
+	        TranStts(Status.standBy);
+		ClearReachable();
+	      }
+	   }
+
+	   if(Input.GetMouseButtonDown(1)) {
+	     ClearReachable();
+	     TranStts(Status.standBy);
+	   }
+	  }
+
+	  if (stts == Status.attack) {
+	   if (Input.GetMouseButtonDown(0)) {
+	     if( CastRayToTile(Input.mousePosition) && reachable.Contains(CastRayToTile(Input.mousePosition))
+		 && CastRayToTile(Input.mousePosition).unit ) {
+	      PlayerControl enemy = CastRayToTile(Input.mousePosition).unit;
+	      enemy.HP -= 2;
+	      Instantiate( Minu2, enemy.transform.position, new Quaternion(0,0,0,0) );
+	      ClearReachable();
+	      TranStts(Status.standBy);
+	     }
+	   }
+
+	   if(Input.GetMouseButtonDown(1)) {
+	     ClearReachable();
+	     TranStts(Status.standBy);
+	   }
+	}
+
+	  if (HP <=0 && alive == true ) {
+	    HP = 0;
+	    Debug.Log("YOU DIED!!!");
+	    Instantiate( YouDied, transform.position, new Quaternion(0,0,0,0) );
+	    GetComponent<SpriteRenderer>().color = new Color(0.5f,0.5f,0.5f);
+      	    alive = false;
+	  }
+	}
+
+	Tile CastRayToTile( Vector2 pos ) {
+	  Ray ray = Camera.main.ScreenPointToRay(pos);
+	  RaycastHit2D hit = Physics2D.Raycast (ray.origin, ray.direction, Mathf.Infinity, moveMask);
+
+
+	  if(hit.transform.gameObject.GetComponent<Tile>()) {
+	    return hit.transform.gameObject.GetComponent<Tile>();
+	  } else {
+	    return null;
+	  }
+	}
+
+	void PathFind() {
+	  Tile cTile = leading;
+	  leading.dist = 0;
+	  leading.visited = true;
+	  Queue<Tile> que = new Queue<Tile>();
+	  que.Enqueue(leading);
+	  while( que.Count != 0 ) {
+	    cTile = que.Peek();
+	    for( int i = -1; i <= 1; i++ ) {
+	      for( int j = -1; j <= 1; j++ ) {
+		if( i!=j && GameObject.Find("GameManager").GetComponent<GameManager>().Bounded( (int)cTile.Q, (int)cTile.R, i, j )) {
+		  Tile neighbor = GameObject.Find("GameManager").GetComponent<GameManager>().OnMap((int)cTile.Q+i, (int)cTile.R+j);
+		  if( !neighbor.visited && cTile.dist +
+		      neighbor.cost <= movement ) {
+		      if( !neighbor.unit ) {
+			reachable.Add(neighbor); 
+			neighbor.Shade(1);
+			neighbor.dist = cTile.dist + neighbor.cost;
+			que.Enqueue(neighbor);
+		      } else if(  neighbor.unit.align != this.align && neighbor.unit.alive == true ) {
+		      } else {
+			past.Add(neighbor);
+			neighbor.dist = cTile.dist + neighbor.cost;
+			que.Enqueue(neighbor);
+		      }
+			
+		      neighbor.visited = true;
+		  }
+		}
+	      }
+	    }
+	    que.Dequeue();
+	  }
+	  leading.dist = -1;
+	  leading.visited = false;
+	}
+
+	void MeleeFind() {
+	    for( int i = -1; i <= 1; i++ ) {
+	      for( int j = -1; j <= 1; j++ ) {
+		if( i!=j && GameObject.Find("GameManager").GetComponent<GameManager>().Bounded( (int)leading.Q, (int)leading.R, i, j )) {
+		  Tile neighbor = GameObject.Find("GameManager").GetComponent<GameManager>().OnMap((int)leading.Q+i, (int)leading.R+j);
+		  reachable.Add(neighbor);
+		  neighbor.Shade(2);
+		}
+	      }
+	    }
+	}
+
+
+
+	void TranStts( Status stts ) {
+	  this.stts = stts;
+	  Debug.Log(stts);
+	}
+
+	void ClearReachable() {
+	  for(int i = 0; i < reachable.Count; i++) {
+	    reachable[i].Clear();
+	  }
+	  for(int i = 0; i < past.Count; i++) {
+	    past[i].Clear();
+	  }
+	  reachable.Clear();
+	  past.Clear();
+	}
+}
+

@@ -1,0 +1,35 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class KRKStatTable : StatTable {
+  public void init() {
+  	HP = 2500;
+	mind = 250;
+	melee = 50;
+	ATK = 1250;
+	armor = 0;
+	evasion = 0;
+	wind = 0;
+	forest = 0;
+	fire = 0;
+	mountain = 0;
+	endurance = 0;
+	movement = 3;
+
+	burningResist = 100;
+	coldResist = 100;
+	corrosionResist = 100;
+	infestionResist = 100;
+	poisonResist = 100;
+	stopResist = 100;
+	crippleResist = 100;
+	stunResis = 100;
+	silenceResis = 100;
+	breakResist = 100;
+	thornResist = 100;
+	blindsightResist = 100;
+	rageResist = 100;
+	dazzleResist = 100;
+  }
+}

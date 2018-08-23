@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: b129275870467344e8351aa095030f51
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - unit: {instanceID: 0}
+  - MoveMark: {fileID: 1664758578011660, guid: 465b8683cc2e52246bd222b1e701d697, type: 2}
+  - MovePassMark: {fileID: 1664758578011660, guid: 465b8683cc2e52246bd222b1e701d697,
+      type: 2}
+  - AttackMark: {fileID: 1664758578011660, guid: 465b8683cc2e52246bd222b1e701d697,
+      type: 2}
+  - AttackPassMark: {fileID: 1664758578011660, guid: 465b8683cc2e52246bd222b1e701d697,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

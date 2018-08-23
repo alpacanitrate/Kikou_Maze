@@ -1,0 +1,63 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraControl : MonoBehaviour {
+	public float baseSpd;
+	public float spd;
+	public float keySpd;
+	public float edgeWidth;
+	public float outWidth;
+	public float zoomSpd;
+	public Camera tCamera;
+
+	float defaultSize;
+
+
+	// Use this for initialization
+	void Start () {
+	  defaultSize = tCamera.orthographicSize;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	  if( Input.mousePosition.x <= edgeWidth && Input.mousePosition.x > -outWidth) {
+	    transform.Translate( new Vector3( (Input.mousePosition.x-baseSpd)*spd*Time.deltaTime, 0, 0));
+	  } else if (Input.mousePosition.x >= Screen.width - edgeWidth && Input.mousePosition.x < Screen.width + outWidth ) {
+	    transform.Translate( new Vector3( (Input.mousePosition.x-Screen.width+baseSpd)*spd*Time.deltaTime, 0, 0));
+  	  }
+
+	  if( Input.mousePosition.y <= edgeWidth && Input.mousePosition.y > -outWidth ) {
+	    transform.Translate( new Vector3( 0, (Input.mousePosition.y-baseSpd)*spd*Time.deltaTime, 0));
+	  } else if (Input.mousePosition.y >= Screen.height - edgeWidth && Input.mousePosition.y < Screen.height + outWidth ) {
+	    transform.Translate( new Vector3( 0, (Input.mousePosition.y-Screen.height+baseSpd)*spd*Time.deltaTime, 0));
+  	  }
+
+	  if( Input.GetKey("h")) {
+	      transform.position = new Vector3(0,0,-15);
+	      tCamera.orthographicSize = defaultSize;
+	  }
+
+	  if( (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetKey("y")) &&  tCamera.orthographicSize > 2 ) {
+	    tCamera.orthographicSize -=Time.deltaTime * zoomSpd;
+	  } else if ( Input.GetAxis("Mouse ScrollWheel") < 0 ) {
+	    tCamera.orthographicSize +=Time.deltaTime * zoomSpd;
+	  }
+
+	  if( Input.GetKey("left")) {
+	    transform.Translate( new Vector3( -baseSpd*Time.deltaTime*keySpd, 0, 0));  
+	  }
+
+	  if( Input.GetKey("right")) {
+	    transform.Translate( new Vector3( baseSpd*Time.deltaTime*keySpd, 0, 0));  
+	  }
+
+	  if( Input.GetKey("up")) {
+	    transform.Translate( new Vector3( 0, baseSpd*Time.deltaTime*keySpd, 0));  
+	  }
+
+	  if( Input.GetKey("down")) {
+	    transform.Translate( new Vector3( 0, -baseSpd*Time.deltaTime*keySpd, 0));  
+	  }
+	}
+}

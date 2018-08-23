@@ -1,0 +1,106 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Tile : MonoBehaviour {
+	public bool clicked;
+	public int cost;
+	public bool visited;
+	public int dist;
+	public Vector2 coord;
+	public float Q;
+	public float R;
+	public PlayerControl unit;
+	public bool blockProjectile;
+	public GameObject MoveMark;
+	public GameObject MovePassMark;
+	public GameObject AttackMark;
+        public GameObject AttackPassMark;
+
+	private Color IdolColor;
+	private GameObject mark;
+
+	// Use this for initialization
+	void Start () {
+	  coord = new Vector2(0, 0);
+	  IdolColor = new Color(1f, 1f, 1f);
+	  dist = -1;
+	  visited = false;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	}
+
+	public void SetCoord(float q, float r) {
+	  coord = new Vector2(q, r);
+	}
+
+	public Vector2 GetCoord() {
+	  return coord;
+	}
+
+	void OnMouseEnter() {
+	  GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f);
+	  Debug.Log("" + dist +"," + R );
+	}
+
+	void OnMouseExit() {
+	  GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
+	}
+
+	void OnMouseClick() {
+	}
+	   
+
+/*	public void SetColor( System.String color ) {
+	  if (color == "red") {
+	    GetComponent<SpriteRenderer>().sprite = red;
+	  } else if (color == "blue") {
+	    GetComponent<SpriteRenderer>().sprite = blue;
+	  } else if (color == "green") {
+	    GetComponent<SpriteRenderer>().sprite = green;
+	  } else if (color == "brown") {
+	    IdolColor = brown;
+	  }
+	}
+
+	public void SetIdolColor( System.String color ) {
+	  if (color == "red") {
+	    IdolColor = red;
+	  } else if (color == "blue") {
+	    IdolColor = blue;
+	  } else if (color == "green") {
+	    IdolColor = green;
+	  } else if (color == "brown") {
+	    IdolColor = brown;
+	  }
+	}
+*/
+
+	public void Shade( int shade ) {
+	  if( shade == 1) {
+	    //IdolColor = new Color(0.3f,0.3f,1);
+	    mark = (GameObject) Instantiate( MoveMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	  } else if ( shade == 0 ) {
+	    //IdolColor = new Color(1,1,1);
+	    Destroy(mark, 0f);
+	  } else if (shade == 2 ) {
+	    //IdolColor = new Color(0.5f,0.5f,1);
+	    mark = (GameObject) Instantiate( MovePassMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	  
+	  } else if (shade == 3 ) {
+	    //IdolColor = new Color(1f,0.1f,0.2f);
+	    mark = (GameObject) Instantiate( AttackMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	  } else if (shade == 4) {
+	    //IdolColor = new Color(1f,0.5f,0.7f);
+	    mark = (GameObject) Instantiate( AttackPassMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	  }
+	}
+
+	public void Clear() {
+	  Shade(0);
+	  visited = false;
+	  dist = -1;
+	}
+}

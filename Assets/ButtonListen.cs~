@@ -1,0 +1,29 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ButtonListen : MonoBehaviour {
+	public bool attackClick;
+	public bool moveClick;
+
+	// Use this for initialization
+	void Start () {
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	  reset()	
+	}
+
+	void reset() {
+	  attackClick = false;
+	  moveClick = false;
+	}
+
+	void attackClicked() {
+	  attackClick = true;
+	}
+	void moveClicked() {
+	  moveClick = true;
+	}
+}
