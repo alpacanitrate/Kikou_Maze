@@ -11,9 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f320f8bf9bd2bbf45a370cbd4233cab7, type: 3}
   m_Name: New Foobar Needle
   m_EditorClassIdentifier: 
-  name: New Ability
   cost: 0
-  coolDown: 0
   silencable: 0
   castType: 2
   range: 0
@@ -21,3 +19,6 @@ MonoBehaviour:
   penetrate: 0
   combatModifier: 0
   owner: {fileID: 0}
+  coolDown: 0
+  CDText: {fileID: 102620995013134482, guid: 2d213cc6d2fae6d45a470aad8d7d6b04, type: 2}
+  cCoolDown: 0

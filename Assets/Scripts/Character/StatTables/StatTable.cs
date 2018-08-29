@@ -21,6 +21,7 @@ public class StatTable {
 	public bool freeMove;
 
 	public Ability[] abilities = new Ability[7];
+	public Feat[] feats = new Feat[7];
 
 	public float burningResist;
 	public float coldResist;

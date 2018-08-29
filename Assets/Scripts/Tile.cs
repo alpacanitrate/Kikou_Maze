@@ -16,9 +16,12 @@ public class Tile : MonoBehaviour {
 	public GameObject MovePassMark;
 	public GameObject AttackMark;
         public GameObject AttackPassMark;
+	public GameObject SelectedMark;
+	public int cover;
 
 	private Color IdolColor;
 	private GameObject mark;
+	private GameObject selectedMark;
 
 	// Use this for initialization
 	void Start () {
@@ -42,7 +45,7 @@ public class Tile : MonoBehaviour {
 
 	void OnMouseEnter() {
 	  GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f);
-	  Debug.Log("" + dist +"," + R );
+	  Debug.Log("" + Q +"," + R );
 	}
 
 	void OnMouseExit() {
@@ -102,5 +105,13 @@ public class Tile : MonoBehaviour {
 	  Shade(0);
 	  visited = false;
 	  dist = -1;
+	}
+
+	public void markSelection (bool mark) {
+	  if( mark ) {
+	    selectedMark =  (GameObject) Instantiate( SelectedMark, transform.position - new Vector3(0, 0, 0.06f), new Quaternion(0,0,0,0));
+	  } else if (selectedMark != null) {
+	    Destroy(selectedMark);
+	  }
 	}
 }

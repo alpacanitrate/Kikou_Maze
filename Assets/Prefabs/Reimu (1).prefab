@@ -9,19 +9,19 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1360175671217980}
+  m_RootGameObject: {fileID: 1393704474364268}
   m_IsPrefabAsset: 1
---- !u!1 &1360175671217980
+--- !u!1 &1393704474364268
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 224642860775630926}
-  - component: {fileID: 212105756618429398}
-  - component: {fileID: 114917204456792306}
-  - component: {fileID: 50944174465327128}
+  - component: {fileID: 224724500392202030}
+  - component: {fileID: 212083713480082372}
+  - component: {fileID: 114550400952993766}
+  - component: {fileID: 50274056392289316}
   m_Layer: 0
   m_Name: Reimu (1)
   m_TagString: Untagged
@@ -29,16 +29,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1389332845107226
+--- !u!1 &1911858169310564
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4196254593705294}
-  - component: {fileID: 23576190458156264}
-  - component: {fileID: 102193218325743332}
+  - component: {fileID: 4259237220013684}
+  - component: {fileID: 23192513684050270}
+  - component: {fileID: 102208323276980558}
   m_Layer: 0
   m_Name: HPText
   m_TagString: Untagged
@@ -46,25 +46,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4196254593705294
+--- !u!4 &4259237220013684
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1389332845107226}
+  m_GameObject: {fileID: 1911858169310564}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.223, y: 1.742, z: -3}
+  m_LocalPosition: {x: -0.539, y: 1.702, z: -3}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
-  m_Father: {fileID: 224642860775630926}
+  m_Father: {fileID: 224724500392202030}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23576190458156264
+--- !u!23 &23192513684050270
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1389332845107226}
+  m_GameObject: {fileID: 1911858169310564}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -94,13 +94,13 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!50 &50944174465327128
+--- !u!50 &50274056392289316
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1360175671217980}
+  m_GameObject: {fileID: 1393704474364268}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -114,13 +114,13 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!102 &102193218325743332
+--- !u!102 &102208323276980558
 TextMesh:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1389332845107226}
+  m_GameObject: {fileID: 1911858169310564}
   m_Text: Hello World
   m_OffsetZ: 0
   m_CharacterSize: 1
@@ -134,13 +134,13 @@ TextMesh:
   m_Font: {fileID: 12800000, guid: ba458c1184541476091009c1abe64a66, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4281649166
---- !u!114 &114917204456792306
+    rgba: 4292137215
+--- !u!114 &114550400952993766
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1360175671217980}
+  m_GameObject: {fileID: 1393704474364268}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 188742ac3fe7b9d488bce2fc4433a71b, type: 3}
@@ -155,11 +155,22 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   activeAbility: {fileID: 0}
+  feats:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  isMaster: 0
+  canSummon: 0
+  manager: {fileID: 0}
   table:
     HP: 2500
     mind: 0
     melee: 50
-    ATK: 1250
+    ATK: 5000
     armor: 50
     evasion: 0
     wind: 0
@@ -173,6 +184,14 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 3ed670d069c70674db1133d36573eae1, type: 2}
     - {fileID: 11400000, guid: f7924b92ca8bbda468bd06f3ea2fee4e, type: 2}
     - {fileID: 11400000, guid: a37a340e150a39e478293459664c49d8, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    feats:
+    - {fileID: 11400000, guid: b6d707b62e477ef46916d518bbbea9d6, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
@@ -198,20 +217,18 @@ MonoBehaviour:
   actions: 000000
   selected: 0
   align: 0
-  InitQ: -2
-  InitR: 0
   alive: 1
   YouDied: {fileID: 1169236132810342, guid: 9945cae97c6f7754bae01c0c88b58aed, type: 2}
   youWin: {fileID: 1664758578011660, guid: 465b8683cc2e52246bd222b1e701d697, type: 2}
   DmgText: {fileID: 102257177248632868, guid: 1e2bd2e85b0fec344a9b377ea8d40dfb, type: 2}
   ActionText: {fileID: 0}
   stts: 0
---- !u!212 &212105756618429398
+--- !u!212 &212083713480082372
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1360175671217980}
+  m_GameObject: {fileID: 1393704474364268}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -252,17 +269,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!224 &224642860775630926
+--- !u!224 &224724500392202030
 RectTransform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1360175671217980}
+  m_GameObject: {fileID: 1393704474364268}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.099999994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4196254593705294}
+  - {fileID: 4259237220013684}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

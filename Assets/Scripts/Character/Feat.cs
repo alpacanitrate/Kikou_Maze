@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class Feat : ScriptableObject {
 
-  public string name = "New Feat";
   public PlayerControl owner;
 
   public bool breakable;

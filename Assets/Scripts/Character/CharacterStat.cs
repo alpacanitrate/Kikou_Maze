@@ -51,7 +51,7 @@ public class CharacterStat{
     return removal;
   }
 
-  public bool RemoveFromeSource( object source ) {
+  public bool RemoveFromSource( object source ) {
     bool removal = false;
     for( int i = statModifiers.Count - 1; i >= 0; i-- ) {
       if( statModifiers[i].source == source ) {

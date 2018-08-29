@@ -16,9 +16,12 @@ public class Tile : MonoBehaviour {
 	public GameObject MovePassMark;
 	public GameObject AttackMark;
         public GameObject AttackPassMark;
+	public GameObject SelectedMark;
+	public int cover;
 
 	private Color IdolColor;
 	private GameObject mark;
+	private GameObject selectedMark;
 
 	// Use this for initialization
 	void Start () {
@@ -42,7 +45,7 @@ public class Tile : MonoBehaviour {
 
 	void OnMouseEnter() {
 	  GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f);
-	  Debug.Log("" + dist +"," + R );
+	  Debug.Log("" + Q +"," + R );
 	}
 
 	void OnMouseExit() {
@@ -81,20 +84,20 @@ public class Tile : MonoBehaviour {
 	public void Shade( int shade ) {
 	  if( shade == 1) {
 	    //IdolColor = new Color(0.3f,0.3f,1);
-	    mark = (GameObject) Instantiate( MoveMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	    mark = (GameObject) Instantiate( MoveMark, transform.position - new Vector3(0, 0, 0.05f), new Quaternion(0,0,0,0));
 	  } else if ( shade == 0 ) {
 	    //IdolColor = new Color(1,1,1);
 	    Destroy(mark, 0f);
 	  } else if (shade == 2 ) {
 	    //IdolColor = new Color(0.5f,0.5f,1);
-	    mark = (GameObject) Instantiate( MovePassMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	    mark = (GameObject) Instantiate( MovePassMark, transform.position - new Vector3(0, 0, 0.05f), new Quaternion(0,0,0,0));
 	  
 	  } else if (shade == 3 ) {
 	    //IdolColor = new Color(1f,0.1f,0.2f);
-	    mark = (GameObject) Instantiate( AttackMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	    mark = (GameObject) Instantiate( AttackMark, transform.position - new Vector3(0, 0, 0.05f), new Quaternion(0,0,0,0));
 	  } else if (shade == 4) {
 	    //IdolColor = new Color(1f,0.5f,0.7f);
-	    mark = (GameObject) Instantiate( AttackPassMark, transform.position - new Vector3(0, 0, 0.1f), new Quaternion(0,0,0,0));
+	    mark = (GameObject) Instantiate( AttackPassMark, transform.position - new Vector3(0, 0, 0.05f), new Quaternion(0,0,0,0));
 	  }
 	}
 
@@ -102,5 +105,13 @@ public class Tile : MonoBehaviour {
 	  Shade(0);
 	  visited = false;
 	  dist = -1;
+	}
+
+	public markSelection (bool mark) {
+	  if( mark ) {
+	    selectedMark =  (GameObject) Instantiate( SelectedMark, transform.position - new Vector3(0, 0, 0.06f), new Quaternion(0,0,0,0));
+	  } else if (selectedMark != null) {
+	    Destroy(selectedMark);
+	  }
 	}
 }

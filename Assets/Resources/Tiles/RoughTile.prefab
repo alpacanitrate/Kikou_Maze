@@ -105,6 +105,9 @@ MonoBehaviour:
   AttackMark: {fileID: 1935545481034876, guid: 5eea949addf300240b5d2e8ca5cdc08c, type: 2}
   AttackPassMark: {fileID: 1768692877057848, guid: 15864dca439f0104d9bd1cf00e13dfb1,
     type: 2}
+  SelectedMark: {fileID: 1491703444607634, guid: 7443633b43955eb4bb64e9b43710b900,
+    type: 2}
+  cover: 0
 --- !u!212 &212695962849690302
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -10,26 +10,71 @@ public class GameManager : MonoBehaviour {
   public int actionAlign;
   public float tileSize;
   public List<PlayerControl.Alignment> aligns;
+  public List<List<PlayerControl>> alignUnits;
   [HideInInspector] public PlayerControl activeUnit;
   private int tileMask;
   public UnityEngine.UI.Text alignText;
   public UnityEngine.UI.Text APText;
+  public UnityEngine.UI.Text actionText;
+  public UnityEngine.UI.Text winText;
+  public UnityEngine.UI.Button summonButton;
   public ButtonListen button;
   List<PlayerControl> moved;
   
-  int AP;
+
+  public List<GameObject> buildTable;
+  public List<GameObject> masterTable;
+  List<PlayerControl> masters;
+  int mastersAlive;
+
+  [HideInInspector] int turns;
+  [HideInInspector] List<int> turnActions;
+  [HideInInspector] List<int> cTurnActions;
+
+  List<int> AP;
   private Object[] tilePres;
+
 
   // Use this for initialization
   void Awake () {
-    resetAP();
+    turns = 1;
     moved = new List<PlayerControl>();
     tileMask = 1<<1;
     mapGen();
-    aligns.Add( PlayerControl.Alignment.overJustice);
-    aligns.Add( PlayerControl.Alignment.neutral);
+    aligns.Add( PlayerControl.Alignment.OverJustice);
+    aligns.Add( PlayerControl.Alignment.Neutral);
+    alignUnits = new List<List<PlayerControl>>();
+    turnActions = new List<int>();
+    cTurnActions = new List<int>();
+    masters = new List<PlayerControl>();
+    AP = new List<int>();
+    for( int i = 0; i < aligns.Count; i++ ) {
+      alignUnits.Add(new List<PlayerControl>());
+      masters.Add( Instantiate( masterTable[i], new Vector3(0, 0, -1), new Quaternion(0, 0, 0, 0) ).GetComponent<PlayerControl>() );
+      alignUnits[i].Add( masters[i] );
+      masters[i].leading = OnMap(-2+i*4, 0);
+      masters[i].GetComponent<Rigidbody2D>().MovePosition( masters[i].leading.transform.position );
+      masters[i].leading.unit = masters[i];
+      masters[i].align = aligns[i];
+      masters[i].isMaster = true;
+      masters[i].canSummon = true;
+      //PlayerControl[] allUnits = (PlayerControl[])GameObject.FindObjectsOfType(typeof(PlayerControl));
+      turnActions.Add(1);
+      cTurnActions.Add(0);
+      AP.Add(0);
+      //for( int j = 0; j < allUnits.Length; j++ ) {
+	//if( allUnits[j].align == aligns[i] ) {
+	  //Debug.Log(allUnits[j]);
+	  //alignUnits[i].Add( allUnits[j] );
+	//}
+      //}
+    }
+    mastersAlive = masters.Count;
+
+
+    resetAP();
     activeUnit = null;
-    alignText.text = "" + aligns[actionAlign];
+    alignText.text = "Turn" + turns + "-" + aligns[actionAlign] + " " + cTurnActions[actionAlign] + "/" + turnActions[actionAlign];
     button = GameObject.Find("ButtonListener").GetComponent<ButtonListen>();
   }
 	
@@ -48,21 +93,30 @@ public class GameManager : MonoBehaviour {
 	}
 
 	activeUnit = CastRayToUnit(Input.mousePosition);
-	if( activeUnit.moved != 0 || AP > 0 ) {
+	if( activeUnit.moved != 0 || AP[actionAlign] > 0 ) {
 	  activeUnit.selected = true;
+	  activeUnit.leading.markSelection(true);
 	  activeUnit.button.reset();
 	  moved.Add(activeUnit);
 	  if( activeUnit.moved == 0 ) {
-	    moved.Add(activeUnit);
+	    moved.Add(activeUnit);alignText.text = "Turn" + turns + "-" + aligns[actionAlign] + " " + cTurnActions[actionAlign] + "/" + turnActions[actionAlign];
 	    activeUnit.refillActions();
 	    useAP(activeUnit.moved);
 	 }
 	}
       }
+
+      if( activeUnit != null ) {
+        if( activeUnit.isMaster &&  !summonButton.interactable ) {
+	  summonButton.interactable = true;
+        } else if( !activeUnit.isMaster &&  summonButton.interactable ) {
+	  summonButton.interactable = false;
+        }
+      }
     }
 
     if( (Input.GetKey("r") || (button.refillClick && button.isReady))
-      && activeUnit != null && activeUnit.moved+1 <= AP &&
+      && activeUnit != null && activeUnit.moved+1 <= AP[actionAlign] &&
       (activeUnit.actions[0] == false || activeUnit.actions[1] == false || activeUnit.actions[2] == false)) {
 	activeUnit.refillActions();
 	useAP( activeUnit.moved );
@@ -82,7 +136,6 @@ public class GameManager : MonoBehaviour {
     for( int i = -mapRad; i <= mapRad; i++ ) {
       List<Tile> row = new List<Tile>();
       for( int j = -mapRad; j <= mapRad; j++ ) {
-	Debug.Log("D"+tilePres.Length);
 	row.Add(TileGen(i, j, Random.Range((int)0, tilePres.Length)));
       }
       map.Add(row);
@@ -120,13 +173,27 @@ public class GameManager : MonoBehaviour {
     } else {
       actionAlign++;
     }
-    alignText.text = "" + aligns[actionAlign];
+    if( cTurnActions[actionAlign] == turnActions[actionAlign] ) {
+      turnShift();
+    }
     resetAP();
 
     for( int i = 0; i < moved.Count; i++ ) {
       moved[i].moved = 0;
     }
     moved.Clear();
+
+    alignText.text = "Turn" + turns + "-" + aligns[actionAlign] + " " + cTurnActions[actionAlign] + "/" + turnActions[actionAlign];
+    actionText.text = "Actions";
+  }
+
+  public void addUnit( Tile tile ) {
+    PlayerControl minion = Instantiate( buildTable[actionAlign],  new Vector3(0, 0, -1), new Quaternion(0, 0, 0, 0) ).GetComponent<PlayerControl>();
+    minion.leading = tile;
+    tile.unit = minion;
+    minion.align = aligns[actionAlign];
+    minion.GetComponent<Rigidbody2D>().MovePosition( tile.transform.position );
+    alignUnits[actionAlign].Add(minion);
   }
 
   PlayerControl CastRayToUnit( Vector2 pos ) {
@@ -146,18 +213,55 @@ public class GameManager : MonoBehaviour {
 	  }
   }
 
+  void turnShift() {
+    turns++;
+    PlayerControl[] allUnits = (PlayerControl[])GameObject.FindObjectsOfType(typeof(PlayerControl));
+    for( int i = 0; i < allUnits.Length; i++ ) {
+      allUnits[i].passTurn();
+    }
+
+    int maxTurnActions = 0;
+    for( int j = 0; j < aligns.Count; j++ ) {
+      if( alignUnits[j].Count > maxTurnActions ) {
+	maxTurnActions = alignUnits[j].Count;
+      }
+      cTurnActions[j] = 0;
+    }
+
+    for( int k = 0; k < aligns.Count; k++ ) {
+      turnActions[k] = maxTurnActions;
+    }
+  }
+
   void resetAP() {
     /*AP += 3;
     if( AP > 4 ) {
       AP = 4;
     }*/
 
-    AP = 3;
-    APText.text = "AP left: " + AP; 
-  }	
+    if( turnActions[actionAlign] - cTurnActions[actionAlign] >= 3 ) {
+      AP[actionAlign] = 3;
+    } else { 
+      AP[actionAlign] = turnActions[actionAlign] - cTurnActions[actionAlign];
+    }
+    APText.text = "AP left: " + AP[actionAlign];
+  }
 
   void useAP( int use ) {
-    AP -= use;
-    APText.text = "AP left: " + AP;
+    AP[actionAlign] -= use;
+    cTurnActions[actionAlign] += use;
+    APText.text = "AP left: " + AP[actionAlign];
+    alignText.text = "Turn" + turns + "-" + aligns[actionAlign] + " " + cTurnActions[actionAlign] + "/" + turnActions[actionAlign];
+  }
+
+  public void masterFallen() {
+    mastersAlive --;
+    if( mastersAlive == 1 ) {
+      for( int i = 0; i < masters.Count; i++ ) {
+	if( masters[i].alive ) {
+	  winText.text = "" + aligns[i] + " is playing to win baby!";
+	}
+      }
+    }
   }
 }

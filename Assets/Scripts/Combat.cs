@@ -6,8 +6,12 @@ public class Combat {
 
   PlayerControl attacker;
   PlayerControl defender;
-  bool atkHit;
-  bool defHit;
+  private bool atkHit;
+  private bool defHit;
+  private float atkBonus;
+  private float defBonus;
+  private float atkOdd;
+  private float defOdd;
 
   // 0 for melee, 1 for ranged
   int type;
@@ -24,10 +28,10 @@ public class Combat {
   }
 
   void combatCalc() {
-    float atkBonus = attacker.melee.finalValue;
-    float defBonus = defender.melee.finalValue;
-    float atkOdd = Random.Range(0, 100 );
-    float defOdd = Random.Range(0, 100 );
+    atkBonus = attacker.melee.finalValue;
+    defBonus = defender.melee.finalValue;
+    atkOdd = Random.Range(0, 100 );
+    defOdd = Random.Range(0, 100 );
 
     if( attacker.align == defender.align ) {
       attacker.win();
@@ -36,22 +40,46 @@ public class Combat {
 
       if( atkBonus + atkOdd  < defBonus + defOdd) {
 	defender.win();
+	if( hitCheck(false)) {
+	  hit( attacker, defender.ATK.finalValue * (100/(100+attacker.armor.finalValue) ));
+	}
+
       } else if (atkBonus + atkOdd > defBonus + defOdd) {
 	attacker.win();
+	if( hitCheck(true)) {
+	  hit( defender, attacker.ATK.finalValue * (100/(100+defender.armor.finalValue) ));
+	}
       }
-
-       if( defHit && 
-  	 atkBonus + atkOdd + attacker.evasion.finalValue < defBonus + defOdd) {
-         hit( attacker, defender.ATK.finalValue * (100/(100+attacker.armor.finalValue) ));
-       }
-
-      if( atkHit && 
-  	 atkBonus + atkOdd > defBonus + defOdd) {
-         hit( defender, attacker.ATK.finalValue * (100/(100+defender.armor.finalValue) ));
-       }
     }
   }
 
+  bool hitCheck( bool attackerIsHitter ) {
+    if( !attackerIsHitter ) {
+      if( defHit && 
+	 atkBonus + atkOdd + attacker.evasion.finalValue < defBonus + defOdd && attacker.leading.cover <= Random.Range(0,100) ) {
+	return true;
+      } else {
+	if( defHit ) {
+	  TextMesh tm = Object.Instantiate( attacker.DmgText, attacker.transform.position - new Vector3 (0.45f + Random.Range(-0.2f, 0.2f), -0.4f, 0), new Quaternion(0,0,0,0) );
+	  tm.text = "Miss!!";
+	  tm.color = new Color( 0.7f, 0.7f, 0.7f );
+	}
+	return false;
+      }
+    } else {
+      if( atkHit && 
+	 defBonus + defOdd + defender.evasion.finalValue < atkBonus + atkOdd && defender.leading.cover <= Random.Range(0,100) ) {
+	return true;
+      } else {
+	if( atkHit ) {
+	  TextMesh tm = Object.Instantiate( defender.DmgText, defender.transform.position - new Vector3 (0.45f + Random.Range(-0.2f, 0.2f), -0.4f, 0), new Quaternion(0,0,0,0) );
+	  tm.text = "Miss";
+	  tm.color = new Color( 0.7f, 0.7f, 0.7f );
+	}
+	return false;
+      } 
+    }     
+  }
   void hit( PlayerControl target, float rawDamage ) {
      float damage = Mathf.Floor(rawDamage);
      target.HP.lose(damage);

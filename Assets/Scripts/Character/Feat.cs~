@@ -8,6 +8,7 @@ public abstract class Feat : ScriptableObject {
   public PlayerControl owner;
 
   public bool breakable;
+  public bool enabled;
 
 
   public abstract void Initialize();

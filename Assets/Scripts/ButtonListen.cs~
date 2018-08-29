@@ -6,6 +6,7 @@ public class ButtonListen : MonoBehaviour {
 	public bool attackClick;
 	public bool moveClick;
 	public bool refillClick;
+	public bool summonClick;
 
 	public bool isReady;
 
@@ -23,6 +24,7 @@ public class ButtonListen : MonoBehaviour {
 	public void reset() {
 	  attackClick = false;
 	  moveClick = false;
+	  refillClick = false;
 	}
 
 	public void attackClicked() {
