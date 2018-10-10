@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class Ability : ScriptableObject {
 
-  public string name = "New Ability";
 
   public int cost;
   public bool silencable;
@@ -16,8 +15,11 @@ public abstract class Ability : ScriptableObject {
   public PlayerControl owner;
   public int coolDown;
   public TextMesh CDText;
+  public bool spc;
+  public sprite icon;
   [HideInInspector]public int cCoolDown;
 
   public abstract void Initialize();
   public abstract bool cast( Tile targetTile );
+  public abstract bool special( Tile targetTile );  
 }

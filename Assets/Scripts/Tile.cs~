@@ -18,6 +18,8 @@ public class Tile : MonoBehaviour {
         public GameObject AttackPassMark;
 	public GameObject SelectedMark;
 	public int cover;
+	public bool stand;
+	public int tilePre;
 
 	private Color IdolColor;
 	private GameObject mark;
@@ -107,7 +109,7 @@ public class Tile : MonoBehaviour {
 	  dist = -1;
 	}
 
-	public markSelection (bool mark) {
+	public void markSelection (bool mark) {
 	  if( mark ) {
 	    selectedMark =  (GameObject) Instantiate( SelectedMark, transform.position - new Vector3(0, 0, 0.06f), new Quaternion(0,0,0,0));
 	  } else if (selectedMark != null) {

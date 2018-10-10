@@ -8,7 +8,7 @@ public class SimpleVitality : Ability {
 
     public override void Initialize () {
       cost = 1;
-      coolDown = 2;
+      coolDown = 6;
       silencable = true;
       castType = 0;
       range = 2;
@@ -18,8 +18,8 @@ public class SimpleVitality : Ability {
     }
     public override bool cast( Tile targetTile ) {
         if( cCoolDown > 0 ) {
-	  TextMesh cdtm = Object.Instantiate( owner.DmgText, owner.transform.position - new Vector3 (0.6f, -2f, 0), new Quaternion(0,0,0,0) );
-	  cdtm.color = new Color(0, 0, 0);
+	  TextMesh cdtm = Object.Instantiate( owner.DmgText, owner.transform.position - new Vector3 (0.8f, -1.2f, 0), new Quaternion(0,0,0,0) );
+	  cdtm.color = new Color(1, 1, 1);
 	  cdtm.text = "冷却中! 还有" + cCoolDown + "回合!";
 	  return false;
 	}
@@ -31,5 +31,9 @@ public class SimpleVitality : Ability {
 
 	cCoolDown = coolDown;
 	return true;
+    }
+
+    public override bool special( Tile targetTile ) {
+      return false;
     }
 }

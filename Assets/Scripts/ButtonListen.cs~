@@ -41,6 +41,11 @@ public class ButtonListen : MonoBehaviour {
 	  isReady = false;
 	}
 
+	public void summonClicked() {
+	  summonClick = true;
+	  isReady = false;
+	}
+
 	public void ready() {
 	  isReady = true;
 	}

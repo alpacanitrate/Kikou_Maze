@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CharacterStat{
+public class CharacterStat {
   public float initValue;
   private List<StatModifier> statModifiers;
   [HideInInspector]public float baseValue;
   [HideInInspector]public float addValue;
   [HideInInspector]public float finalValue;
   [HideInInspector]public float remain;
+  [HideInInspector]public bool locked;
 
   public CharacterStat() {
     statModifiers = new List<StatModifier>();
@@ -21,11 +22,15 @@ public class CharacterStat{
   }
 
   public void lose(float lost) {
-    remain -= lost;
+    if( !locked ) {
+      remain -= lost;
+    }
   }
 
   public void regen(float got) {
-    remain += got;
+    if( !locked ) {
+      remain += got;
+    }
   }
 
   public void addStatModifier( StatModifier mod) {
@@ -66,28 +71,38 @@ public class CharacterStat{
   }
 
   public void calcValue() {
-    baseValue = initValue;
-    addValue = baseValue;
-    float addPercent = 1;
-    float oldFinal = finalValue;
+    if( locked ) {
+      finalValue = initValue;
+    } else {
+      baseValue = initValue;
+      addValue = baseValue;
+      float addPercent = 1;
+      float oldFinal = finalValue;
 
-    for( int i = 0; i < statModifiers.Count; i++ ) {
-      StatModifier mod = statModifiers[i];
-      if( mod.type == 0 ) {
-	baseValue += mod.statValue;
-      } else if ( mod.type == 1 ) {
-	baseValue *= 1 + mod.statValue;
-      } else if ( mod.type == 2 ) {
-	addPercent += mod.statValue;
-	addValue = baseValue * addPercent;
-      } else if ( mod.type == 3 ) {
-	addValue += mod.statValue;
+      for( int i = 0; i < statModifiers.Count; i++ ) {
+	StatModifier mod = statModifiers[i];
+	if( mod.type == 0 ) {
+	  baseValue += mod.statValue;
+	} else if ( mod.type == 1 ) {
+	  baseValue *= 1 + mod.statValue;
+	} else if ( mod.type == 2 ) {
+	  addPercent += mod.statValue;
+	  addValue = baseValue * addPercent;
+	} else if ( mod.type == 3 ) {
+	  addValue += mod.statValue;
+	} else if ( mod.type == 4 ) {
+	  if( mod.statValue >= 100 ) {
+	    baseValue = 100;
+	  } else {
+	   baseValue = 100 - ((100 - baseValue) * (100 - mod.statValue));
+	  }
+	}
       }
-    }
 
-    baseValue = (float)Math.Round(baseValue, 4);
-    addValue = (float)Math.Round(addValue, 4);
-    finalValue = baseValue + addValue;
-    remain =(float)Math.Round( remain * finalValue / oldFinal );
+      baseValue = (float)Math.Round(baseValue, 4);
+      addValue = (float)Math.Round(addValue, 4);
+      finalValue = baseValue + addValue;
+      remain =(float)Math.Round( remain * finalValue / oldFinal );
+    }
   }  
 }

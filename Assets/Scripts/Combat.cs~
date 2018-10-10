@@ -12,6 +12,7 @@ public class Combat {
   private float defBonus;
   private float atkOdd;
   private float defOdd;
+  public PlayerControl winner;
 
   // 0 for melee, 1 for ranged
   int type;
@@ -28,26 +29,31 @@ public class Combat {
   }
 
   void combatCalc() {
-    float atkBonus = attacker.melee.finalValue;
-    float defBonus = defender.melee.finalValue;
-    float atkOdd = Random.Range(0, 100 );
-    float defOdd = Random.Range(0, 100 );
+    atkBonus = attacker.melee.finalValue;
+    defBonus = defender.melee.finalValue;
+    atkOdd = Random.Range(0, 100 );
+    defOdd = Random.Range(0, 100 );
 
     if( attacker.align == defender.align ) {
       attacker.win();
-      hit( defender, attacker.ATK.finalValue * (100/(100+defender.armor.finalValue) ));
+      winner = attacker;
+      hit( attacker, defender );
     } else {
 
       if( atkBonus + atkOdd  < defBonus + defOdd) {
 	defender.win();
+	winner = defender;
 	if( hitCheck(false)) {
-	  hit( attacker, defender.ATK.finalValue * (100/(100+attacker.armor.finalValue) ));
+	  //hit( attacker, defender.ATK.finalValue * (100/(100+attacker.armor.finalValue) ));
+	  hit( defender, attacker );
 	}
 
       } else if (atkBonus + atkOdd > defBonus + defOdd) {
 	attacker.win();
+	winner = attacker;
 	if( hitCheck(true)) {
-	  hit( defender, attacker.ATK.finalValue * (100/(100+defender.armor.finalValue) ));
+	  //hit( defender, attacker.ATK.finalValue * (100/(100+defender.armor.finalValue) ));
+	  hit( attacker, defender );
 	}
       }
     }
@@ -80,11 +86,11 @@ public class Combat {
       } 
     }     
   }
-  void hit( PlayerControl target, float rawDamage ) {
-     float damage = Mathf.Floor(rawDamage);
-     target.HP.lose(damage);
+  void hit( PlayerControl hitter, PlayerControl hittee ) {
+     Damage dmg = new Damage( hitter, hittee, hitter.ATK.finalValue, 1, "" );
+     hittee.sanCheck( dmg );
      //Instantiate( Minu2, enemy.transform.position, new Quaternion(0,0,0,0) );
-     TextMesh tm = Object.Instantiate( target.DmgText, target.transform.position - new Vector3 (0.45f + Random.Range(-0.2f, 0.2f), -0.4f, 0), new Quaternion(0,0,0,0) );
-     tm.text = "" + damage;
+     TextMesh tm = Object.Instantiate( hittee.DmgText, hittee.transform.position - new Vector3 (0.45f + Random.Range(-0.2f, 0.2f), -0.4f, 0), new Quaternion(0,0,0,0) );
+     tm.text = "" + dmg.GetDmg();
   }
 }

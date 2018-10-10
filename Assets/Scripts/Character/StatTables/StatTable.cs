@@ -10,6 +10,7 @@ public class StatTable {
 	public float melee;
 	public float ATK;
 	public float armor;
+	public float magicResist;
 	public float evasion;
 	public float wind;
 	public float forest;
@@ -22,6 +23,7 @@ public class StatTable {
 
 	public Ability[] abilities = new Ability[7];
 	public Feat[] feats = new Feat[7];
+	public int cost;
 
 	public float burningResist;
 	public float coldResist;

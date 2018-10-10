@@ -15,8 +15,11 @@ public abstract class Ability : ScriptableObject {
   public PlayerControl owner;
   public int coolDown;
   public TextMesh CDText;
+  public bool spc;
+  public Sprite icon;
   [HideInInspector]public int cCoolDown;
 
   public abstract void Initialize();
   public abstract bool cast( Tile targetTile );
+  public abstract bool special( Tile targetTile );  
 }

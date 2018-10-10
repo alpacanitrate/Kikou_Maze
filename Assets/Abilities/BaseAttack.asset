@@ -14,11 +14,13 @@ MonoBehaviour:
   cost: 0
   silencable: 0
   castType: 2
-  range: 0
+  range: 1
   combat: 1
   penetrate: 1
   combatModifier: 0
   owner: {fileID: 0}
   coolDown: 0
   CDText: {fileID: 102620995013134482, guid: 2d213cc6d2fae6d45a470aad8d7d6b04, type: 2}
+  spc: 0
+  icon: {fileID: 21300000, guid: c75b838ba48afb043a603029fa3dfb03, type: 3}
   cCoolDown: 0

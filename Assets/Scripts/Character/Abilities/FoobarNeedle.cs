@@ -7,14 +7,14 @@ public class FoobarNeedle : Ability {
 
 
     public override void Initialize () {
-      cost = 0;
+      /*cost = 0;
       coolDown = 0;
       silencable = false;
       castType = 2;
       range = 2;
       combat = true;
       penetrate = false;
-      combatModifier = 0;
+      combatModifier = 0;*/
     }
     public override bool cast( Tile targetTile ) {
       if( targetTile.unit == null ) {
@@ -29,5 +29,8 @@ public class FoobarNeedle : Ability {
       } else {
 	return false;
       }
+    }
+    public override bool special( Tile targetTile ) {
+      return false;
     }
 }

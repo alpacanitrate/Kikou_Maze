@@ -7,14 +7,14 @@ public class SimpleVitality : Ability {
 
 
     public override void Initialize () {
-      cost = 1;
-      coolDown = 2;
+      /*cost = 1;
+      coolDown = 6;
       silencable = true;
       castType = 0;
       range = 2;
       combat = false;
       penetrate = true;
-      combatModifier = 0;
+      combatModifier = 0;*/
     }
     public override bool cast( Tile targetTile ) {
         if( cCoolDown > 0 ) {
@@ -31,5 +31,9 @@ public class SimpleVitality : Ability {
 
 	cCoolDown = coolDown;
 	return true;
+    }
+
+    public override bool special( Tile targetTile ) {
+      return false;
     }
 }

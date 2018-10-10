@@ -13,6 +13,7 @@ public class FoobarNeedle : Ability {
       castType = 2;
       range = 2;
       combat = true;
+      penetrate = false;
       combatModifier = 0;
     }
     public override bool cast( Tile targetTile ) {
@@ -28,5 +29,8 @@ public class FoobarNeedle : Ability {
       } else {
 	return false;
       }
+    }
+    public override bool special( Tile targetTile ) {
+      return false;
     }
 }

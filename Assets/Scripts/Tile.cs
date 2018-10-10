@@ -18,6 +18,8 @@ public class Tile : MonoBehaviour {
         public GameObject AttackPassMark;
 	public GameObject SelectedMark;
 	public int cover;
+	public bool standGround;
+	public int tilePre;
 
 	private Color IdolColor;
 	private GameObject mark;

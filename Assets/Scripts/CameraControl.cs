@@ -59,5 +59,7 @@ public class CameraControl : MonoBehaviour {
 	  if( Input.GetKey("down")) {
 	    transform.Translate( new Vector3( 0, -baseSpd*Time.deltaTime*keySpd, 0));  
 	  }
+	  
+	  //transform.Rotate( new Vector3( 0, 0, 10f * Time.deltaTime ));
 	}
 }
